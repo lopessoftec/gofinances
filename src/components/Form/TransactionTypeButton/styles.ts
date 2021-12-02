@@ -22,11 +22,11 @@ export const Container = styled.View<ContainerProps>`
 
     /* então adiciono css */
     ${({ isActive, type }) => isActive && type === 'up' && css`
-        background-color: ${({ theme }) => theme.colors.attention_light};
+        background-color: ${({ theme }) => theme.colors.success_light};
     `}
 
     ${({ isActive, type }) => isActive && type === 'down' && css`
-        background-color: ${({ theme }) => theme.colors.success_light};
+        background-color: ${({ theme }) => theme.colors.attention_light};
     `}
 `;
 
