@@ -21,7 +21,7 @@ import { AppRoutes } from './src/routes/app.routes';
 
 import { SignIn } from './src/screens/SignIn';
 
-import { AuthContext } from './src/AuthContext';
+import { AuthProvider } from './src/hooks/auth';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -39,9 +39,9 @@ export default function App() {
       <NavigationContainer>
         <StatusBar barStyle="light-content" />
 
-        <AuthContext.Provider value={['Ytalo']}>
+        <AuthProvider>
           <SignIn />
-        </AuthContext.Provider>
+        </AuthProvider>
 
       </NavigationContainer>
     </ThemeProvider>
