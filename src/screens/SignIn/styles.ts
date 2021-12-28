@@ -36,8 +36,8 @@ export const  SignInTitle = styled.Text`
 
     text-align: center;
 
-    margin-top: 80;
-    margin-bottom: 67;
+    margin-top: 80px;
+    margin-bottom: 67px;
 `;
 
 export const  Footer = styled.View`
