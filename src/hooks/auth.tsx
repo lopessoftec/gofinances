@@ -2,7 +2,8 @@ import React, {
     createContext, 
     ReactNode,
     useContext,
-    useState
+    useState,
+    useEffect
 } from 'react';
 
 const { CLIENT_ID } = process.env;
@@ -40,6 +41,9 @@ const AuthContext = createContext({} as IAuthContextData); //irei ter um objeto 
 
 function AuthProvider({ children }: AuthproviderProps){
     const [user, setUser] = useState<User>({} as User); //começa como objeto vazio e é do tipo User
+    const [userStorageLoading, setUserStorageLoading] = useState(true);
+
+    const userStoragekey = '@gofinances:user';
 
     async function signInWithGoogle(){
         try{
@@ -55,12 +59,14 @@ function AuthProvider({ children }: AuthproviderProps){
                 const response = await fetch(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${params.access_token}`);
                 const userInfo = await response.json();
 
-                setUser({
-                    id: userInfo.id,
+                const userLogged = {
+                    id: String(userInfo.id),
                     name: userInfo.given_name,
                     email: userInfo.email,
                     photo: userInfo.picture
-                });
+                }
+                setUser(userLogged);
+                await AsyncStorage.setItem(userStoragekey, JSON.stringify(userLogged));
             }
         }catch(error){
             throw new Error(error as string); //irei tratar lanmcando o erro para quem chamou
@@ -85,7 +91,7 @@ function AuthProvider({ children }: AuthproviderProps){
                 }
 
                 setUser(userLogged);
-                await AsyncStorage.setItem('@gofinances:user', JSON.stringify(userLogged))
+                await AsyncStorage.setItem(userStoragekey, JSON.stringify(userLogged))
             }
 
 
@@ -93,6 +99,21 @@ function AuthProvider({ children }: AuthproviderProps){
             throw new Error(error as string);
         }
     }
+
+    useEffect(() => {
+        async function loadUserStorageDate(){
+            const userStoraged = await AsyncStorage.getItem(userStoragekey);
+
+            if(userStoraged){
+                const userLogged = JSON.parse(userStoraged) as User;
+                setUser(userLogged);
+            }
+
+            setUserStorageLoading(false);
+        }
+
+        loadUserStorageDate();
+    },[]);
 
     return (
         <AuthContext.Provider value={{ 
