@@ -34,7 +34,6 @@ export function SignIn(){
         } catch (error){
             console.log(error);
             Alert.alert('Não foi possivel conectar a conta Google');
-        }finally{
             // se deu certo ou não seta como falso para parar o load
             setIsLoading(false);
         }
@@ -46,7 +45,6 @@ export function SignIn(){
         } catch (error){
             console.log(error);
             Alert.alert('Não foi possivel conectar a conta Apple');
-        }finally{
             // se deu certo ou não seta como falso para parar o load
             setIsLoading(false);
         }
