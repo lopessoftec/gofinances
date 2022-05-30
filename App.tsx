@@ -39,10 +39,10 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-        <StatusBar barStyle="light-content" />
-        <AuthProvider>
-          <Routes />
-        </AuthProvider>
+      <StatusBar barStyle="light-content" />
+      <AuthProvider>
+        <Routes />
+      </AuthProvider>
     </ThemeProvider>
   )
 }
