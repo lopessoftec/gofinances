@@ -24,7 +24,7 @@ import {
     MonthSelectIcon,
     Month,
     LoadContainer
-}from './styles';
+} from './styles';
 
 import { categories } from '../Utils/categories';
 
@@ -36,16 +36,16 @@ interface TransactionData {
     date: string;
 }
 
-interface CategoryData{
+interface CategoryData {
     key: string;
     name: string;
     total: number;
     totalFormatted: string;
-    color:string;
+    color: string;
     percent: string;
 }
 
-export function Resume(){
+export function Resume() {
     const [isLoading, setIsLoading] = useState(false);
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [totalByCategories, setTotalByCategories] = useState<CategoryData[]>([]);
@@ -53,50 +53,48 @@ export function Resume(){
     const theme = useTheme();
     const { user } = useAuth();
 
-    function handleDateChange(action: 'next' | 'prev'){
-        if(action === 'next'){
+    function handleDateChange(action: 'next' | 'prev') {
+        if (action === 'next') {
             setSelectedDate(addMonths(selectedDate, 1));
-        }else{
+        } else {
             setSelectedDate(subMonths(selectedDate, 1));
         }
     }
 
-    async function loadData(){
+    async function loadData() {
         setIsLoading(true);
         const dataKey = `@gofinances:transactions_user:${user.id}`;
         const response = await AsyncStorage.getItem(dataKey);
         const responseFomatted = response ? JSON.parse(response) : [];
 
         const expensives = responseFomatted
-        .filter((expensive: TransactionData) => 
-        expensive.type === 'negative' && 
-        new Date(expensive.date).getMonth() === selectedDate.getMonth() &&
-        new Date(expensive.date).getFullYear() === selectedDate.getFullYear()
-        );
+            .filter((expensive: TransactionData) =>
+                expensive.type === 'negative' &&
+                new Date(expensive.date).getMonth() === selectedDate.getMonth() &&
+                new Date(expensive.date).getFullYear() === selectedDate.getFullYear()
+            );
 
         const expensivesTotal = expensives.reduce((acumullator: number, expensive: TransactionData) => {
             return acumullator + Number(expensive.amount);
         }, 0);
 
-        console.log(expensivesTotal);
-
         const totalByCategory: CategoryData[] = [];
-        
+
         categories.forEach(category => {
             let categorySum = 0;
 
-            expensives.forEach((expensive : TransactionData) => {
-                if(expensive.category === category.key){
+            expensives.forEach((expensive: TransactionData) => {
+                if (expensive.category === category.key) {
                     categorySum += Number(expensive.amount);
                 }
             });
 
-            if(categorySum > 0){
+            if (categorySum > 0) {
                 const totalFormatted = categorySum
-                .toLocaleString('pt-BR', {
-                    style: 'currency',
-                    currency: 'BRL'
-                });
+                    .toLocaleString('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL'
+                    });
 
                 const percent = `${(categorySum / expensivesTotal * 100).toFixed(0)}%`;
 
@@ -119,67 +117,68 @@ export function Resume(){
         loadData();
     }, [selectedDate]));
 
-    return(
+    return (
         <Container>
             <Header>
                 <Title>Resumo por categoria</Title>
             </Header>
             {
-                isLoading ? 
-                <LoadContainer>
-                    <ActivityIndicator 
-                        color={theme.colors.primary}
-                        size="large"
-                    />
-                </LoadContainer> :
-                <Content
-                    showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{
-                        paddingHorizontal: 24,
-                        paddingBottom: useBottomTabBarHeight(),
-                    }}
-                >
-                    <MonthSelect>
-                        <MonthSelectButton onPress={() => handleDateChange('prev')}>
-                            <MonthSelectIcon name="chevron-left"/>
-                        </MonthSelectButton>
-
-                        <Month>
-                            { format(selectedDate, 'MMMM, yyyy', {locale: ptBR}) }
-                        </Month>
-
-                        <MonthSelectButton onPress={() => handleDateChange('next')}>
-                            <MonthSelectIcon name="chevron-right"/>
-                        </MonthSelectButton>
-                    </MonthSelect>
-
-                    <ChartContainer>
-                        <VictoryPie
-                            data={totalByCategories}
-                            colorScale={totalByCategories.map(category => category.color)}
-                            style={{
-                                labels: {fontSize: RFValue(18),
-                                fontWeight: 'bold',
-                                fill: theme.colors.shape
-                                }
-                            }}
-                            labelRadius={50}
-                            x="percent"
-                            y="total"
+                isLoading ?
+                    <LoadContainer>
+                        <ActivityIndicator
+                            color={theme.colors.primary}
+                            size="large"
                         />
-                    </ChartContainer>
+                    </LoadContainer> :
+                    <Content
+                        showsVerticalScrollIndicator={false}
+                        contentContainerStyle={{
+                            paddingHorizontal: 24,
+                            paddingBottom: useBottomTabBarHeight(),
+                        }}
+                    >
+                        <MonthSelect>
+                            <MonthSelectButton onPress={() => handleDateChange('prev')}>
+                                <MonthSelectIcon name="chevron-left" />
+                            </MonthSelectButton>
 
-                    {
-                        totalByCategories.map(item => (
-                            <HistoryCard 
-                                key={item.key}    
-                                title={item.name}
-                                amount={item.totalFormatted}
-                                color={item.color}
+                            <Month>
+                                {format(selectedDate, 'MMMM, yyyy', { locale: ptBR })}
+                            </Month>
+
+                            <MonthSelectButton onPress={() => handleDateChange('next')}>
+                                <MonthSelectIcon name="chevron-right" />
+                            </MonthSelectButton>
+                        </MonthSelect>
+
+                        <ChartContainer>
+                            <VictoryPie
+                                data={totalByCategories}
+                                colorScale={totalByCategories.map(category => category.color)}
+                                style={{
+                                    labels: {
+                                        fontSize: RFValue(18),
+                                        fontWeight: 'bold',
+                                        fill: theme.colors.shape
+                                    }
+                                }}
+                                labelRadius={50}
+                                x="percent"
+                                y="total"
                             />
-                        ))
-                    }
-                </Content>
+                        </ChartContainer>
+
+                        {
+                            totalByCategories.map(item => (
+                                <HistoryCard
+                                    key={item.key}
+                                    title={item.name}
+                                    amount={item.totalFormatted}
+                                    color={item.color}
+                                />
+                            ))
+                        }
+                    </Content>
             }
         </Container>
     )

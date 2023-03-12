@@ -21,29 +21,27 @@ import {
     FooterWrapper
 } from './styles';
 
-export function SignIn(){
+export function SignIn() {
     const [isLoading, setIsLoading] = useState(false);
 
     const { signInWithGoogle, signInWithApple } = useAuth();
     const theme = useTheme();
 
-    async function handleSignInWithGoogle(){
-        try{
+    async function handleSignInWithGoogle() {
+        try {
             setIsLoading(true);
             return await signInWithGoogle();
-        } catch (error){
-            console.log(error);
+        } catch (error) {
             Alert.alert('Não foi possivel conectar a conta Google');
             // se deu certo ou não seta como falso para parar o load
             setIsLoading(false);
         }
     }
-    async function handleSignInWithApple(){
-        try{
+    async function handleSignInWithApple() {
+        try {
             setIsLoading(true);
             return await signInWithApple();
-        } catch (error){
-            console.log(error);
+        } catch (error) {
             Alert.alert('Não foi possivel conectar a conta Apple');
             // se deu certo ou não seta como falso para parar o load
             setIsLoading(false);
@@ -75,7 +73,7 @@ export function SignIn(){
                 <FooterWrapper>
                     {
                         Platform.OS === 'android' &&
-                        <SignInSocialButton 
+                        <SignInSocialButton
                             title="Entrar com Google"
                             svg={GoogleSvg}
                             onPress={handleSignInWithGoogle}
@@ -84,7 +82,7 @@ export function SignIn(){
 
                     {
                         Platform.OS === 'ios' &&
-                        <SignInSocialButton 
+                        <SignInSocialButton
                             title="Entrar com Apple"
                             svg={AppleSvg}
                             onPress={handleSignInWithApple}
@@ -92,11 +90,11 @@ export function SignIn(){
                     }
                 </FooterWrapper>
 
-                { isLoading && 
-                    <ActivityIndicator 
-                        color={theme.colors.shape} 
-                        style={{ marginTop:  18}}    
-                    /> 
+                {isLoading &&
+                    <ActivityIndicator
+                        color={theme.colors.shape}
+                        style={{ marginTop: 18 }}
+                    />
                 }
             </Footer>
         </Container>

@@ -80,7 +80,6 @@ function AuthProvider({ children }: AuthproviderProps) {
             setUser(userLogged);
             await AsyncStorage.setItem(userStoragekey, JSON.stringify(userLogged));
         } catch (error) {
-            console.log(error);
             throw new Error(error as string); //irei tratar lanmcando o erro para quem chamou
         }
     }
@@ -123,7 +122,6 @@ function AuthProvider({ children }: AuthproviderProps) {
 
     useEffect(() => {
         async function loadUserStorageDate() {
-            console.log('loadUserStorageDate');
             const userStoraged = await AsyncStorage.getItem(userStoragekey);
 
             if (userStoraged) {
