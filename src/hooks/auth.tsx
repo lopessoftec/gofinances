@@ -58,28 +58,28 @@ function AuthProvider({ children }: AuthproviderProps) {
             const { type, params } = await AuthSession
                 .startAsync({ authUrl }) as AuthorizationResponse;
 
-            // if (type === 'success') {
-            //     const response = await fetch(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${params.access_token}`);
-            //     const userInfo = await response.json();
+            if (type === 'success') {
+                const response = await fetch(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${params.access_token}`);
+                const userInfo = await response.json();
 
-            //     const userLogged = {
-            //         id: String(userInfo.id),
-            //         name: userInfo.given_name,
-            //         email: userInfo.email,
-            //         photo: userInfo.picture
-            //     }
-            //     setUser(userLogged);
-            //     await AsyncStorage.setItem(userStoragekey, JSON.stringify(userLogged));
-            // }
-
-            const userLogged = {
-                id: '5456464546',
-                name: 'Ytalo',
-                email: 'lopessoftec@gmail.com',
-                photo: 'https://avatars.githubusercontent.com/u/54129629?v=4'
+                const userLogged = {
+                    id: String(userInfo.id),
+                    name: userInfo.given_name,
+                    email: userInfo.email,
+                    photo: userInfo.picture
+                }
+                setUser(userLogged);
+                await AsyncStorage.setItem(userStoragekey, JSON.stringify(userLogged));
             }
-            setUser(userLogged);
-            await AsyncStorage.setItem(userStoragekey, JSON.stringify(userLogged));
+
+            // const userLogged = {
+            //     id: '5456464546',
+            //     name: 'Ytalo',
+            //     email: 'lopessoftec@gmail.com',
+            //     photo: 'https://avatars.githubusercontent.com/u/54129629?v=4'
+            // }
+            // setUser(userLogged);
+            // await AsyncStorage.setItem(userStoragekey, JSON.stringify(userLogged));
         } catch (error) {
             throw new Error(error as string); //irei tratar lanmcando o erro para quem chamou
         }

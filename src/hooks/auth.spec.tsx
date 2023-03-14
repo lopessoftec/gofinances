@@ -47,4 +47,17 @@ describe('Auth Hook', () => {
 
         expect(result.current.user).toBeTruthy();
     })
+
+    // it('user should not connect if cancel authentication with Google', async () => {
+
+    //     // Por volta do useAuth() é passado o AuthProvider
+    //     const { result } = renderHook(() => useAuth(), {
+    //         wrapper: AuthProvider
+    //     });
+
+    //     // Aqui ele realiza o login
+    //     await act(() => result.current.signInWithGoogle());
+
+    //     expect(result.current.user).not.toHaveProperty('id');
+    // })
 })

@@ -56,7 +56,9 @@
     "@types/styled-components-react-native": "^5.1.1",
     "jest": "^28.1.0",
     "jest-expo": "^45.0.1",
+    "jest-fetch-mock": "^3.0.3",
     "jest-styled-components": "^7.1.1",
+    "ts-jest": "^29.0.5",
     "typescript": "~4.0.0"
   },
   "private": true
