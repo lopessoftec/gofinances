@@ -60,4 +60,20 @@ describe('Auth Hook', () => {
 
     //     expect(result.current.user).not.toHaveProperty('id');
     // })
+
+    it('should be error sign-in with incorrectly Google parameters', async () => {
+
+        // Por volta do useAuth() é passado o AuthProvider
+        const { result } = renderHook(() => useAuth(), {
+            wrapper: AuthProvider
+        });
+
+        try {
+            // Aqui ele realiza o login
+            await act(() => result.current.signInWithGoogle());
+        } catch {
+            expect(result.current.user).not.toEqual({});
+        }
+
+    })
 })
